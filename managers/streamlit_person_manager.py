@@ -14,7 +14,9 @@ class StreamlitPersonManager:
         labels = MENU_ITEMS[language]
         properties = NODE_PROPERTIES['person'][language]
 
-        st.subheader(f"{labels["add_person"]} *")
+        # st.subheader(f"{labels["add_person"]} *")
+        st.subheader(f"{labels['add_person']} *")
+
         person_name = st.text_input(properties["name"], key="add_person_name")
 
         all_skills = self.db_manager.get_all_skills()

@@ -365,12 +365,12 @@ class StreamlitSkillManager:
 
             with col11:
                 if st.button(key=f'button_desc_en_{selected_skill["title"]}',
-                             label=f'€ {labels.get('generate_gpt_desc_en', 'Generate GPT Description (EN)')}'):
+                            label=f"€ {labels.get('generate_gpt_desc_en', 'Generate GPT Description (EN)')}"):
                     st.session_state[f'button_desc_en_{selected_skill["title"]}_pressed'] = True
 
             with col12:
                 if st.button(key=f'button_desc_fi_{selected_skill["title"]}',
-                             label=f'€ {labels.get('generate_gpt_desc_fi', 'Generate GPT Description (FI)')}'):
+                             label = f"€ {labels.get('generate_gpt_desc_fi', 'Generate GPT Description (FI)')}"):
                     st.session_state[f'button_desc_fi_{selected_skill["title"]}_pressed'] = True
 
             if st.session_state[f'button_desc_en_{selected_skill["title"]}_pressed']:
