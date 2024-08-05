@@ -337,10 +337,11 @@ class StreamlitCourseManager:
 
                 with course_col1:
                     st.subheader(labels["connected_skills"])
-                    selected_connected_skills_titles = [
-                        title for title in connected_skills_titles if st.checkbox(title, key=f"connected_{title}")
-                    ]
-
+                    # selected_connected_skills_titles = [
+                    #     title for title in connected_skills_titles if st.checkbox(title, key=f"connected_{title}")
+                    # ]
+                    selected_connected_skills_titles = [title for idx, title in enumerate(connected_skills_titles)
+                                                        if st.checkbox(title, key=f"connected_{idx}_{title}")]
                 with course_col3:
                     st.subheader(labels["unconnected_skills"])
                     selected_unconnected_skills_titles = st.multiselect(" ", formatted_unconnected_skills_titles,

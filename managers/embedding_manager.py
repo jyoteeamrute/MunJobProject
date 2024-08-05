@@ -21,7 +21,7 @@ class EmbeddingManager:
         text = re.sub(r'[^\w\s]', '', text)
         text = " ".join(word for word in text.split() if word not in EmbeddingManager.stop_words)
         return text
-
+    
     def add_to_embeddings(self, title, description, path_key, warnings_fn=None):
         if path_key not in path_data:
             message = "Invalid path key provided."
@@ -58,11 +58,23 @@ class EmbeddingManager:
                     warnings_fn(message)
                 return
             else:
+                # @Ensure the dimensions match before stacking
+                if embeddings.ndim == 1:
+                    embeddings = embeddings.reshape(1, -1)  #@ Ensure embeddings is 2D
+                if embedding.ndim == 1:
+                    embedding = embedding.reshape(1, -1)  # @Ensure embedding is 2D
+
+                if embeddings.shape[1] != embedding.shape[0]:#@ Ensure the dimensions match before stacking
+                    message = f"Embedding dimensions do not match: {embeddings.shape[1]} vs {embedding.shape[0]}"
+                    if warnings_fn:
+                        warnings_fn(message)
+                    return
+
                 embeddings = np.vstack((embeddings, embedding))
                 processed_lines.append(title_description)
                 title_lines.append(title)
         else:
-            embeddings = embedding
+            embeddings = embedding.reshape(1, -1)  #@ Ensure embedding is 2D for consistency
             processed_lines = [title_description]
             title_lines = [title]
 

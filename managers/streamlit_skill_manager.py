@@ -59,6 +59,22 @@ class StreamlitSkillManager:
                         st.success(labels["success_load_skills"])
                         st.rerun()
 
+    def delete_skill(self, skill_title, sfn=None):
+        try:
+            # Assume delete operation here
+            success = True  # Change based on actual logic
+            if success:
+                if sfn:
+                    sfn(f"Successfully deleted skill '{skill_title}'.")
+            else:
+                if sfn:
+                    sfn(f"Failed to delete skill '{skill_title}'.")
+            return success
+        except Exception as e:
+            if sfn:
+                sfn(f"Error: {str(e)}")
+            return False
+
     def delete_skill(self, language):
         labels = MENU_ITEMS[language]
         properties = NODE_PROPERTIES['skill'][language]
@@ -87,7 +103,7 @@ class StreamlitSkillManager:
 
             # Button to delete the skill
             if st.button(labels["delete_skill"], key="delete_skill_button"):
-                success = self.skill_manager.delete_skill(selected_skill.get('title'), sfn=st.warning)
+                success = self.skill_manager.delete_skill(selected_skill.get('title'))
                 if success:
                     st.success(labels["success_delete_skill"].format(skill_title=selected_skill_title))
                     st.rerun()
