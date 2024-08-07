@@ -367,7 +367,7 @@ class StreamlitCourseManager:
                                     st.success(labels["success_disconnect_skills_from_course"].format(
                                         course_title=selected_course[language_key]
                                     ))
-                                    st.rerun()
+                                    # st.rerun()
                             except Exception as e:
                                 st.error(f"Error disconnecting skills: {e}")
 
@@ -391,7 +391,7 @@ class StreamlitCourseManager:
                                     st.success(labels["success_connect_skills_to_course"].format(
                                         course_title=selected_course['title']
                                     ))
-                                    st.rerun()
+                                    # st.rerun()
                             except Exception as e:
                                 st.error(f"Error connecting skills: {e}")
 

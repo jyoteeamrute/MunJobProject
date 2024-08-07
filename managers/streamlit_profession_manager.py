@@ -371,7 +371,7 @@ class StreamlitProfessionManager:
                                     st.success(labels["success_disconnect_skills_from_profession"].format(
                                         profession_title=selected_profession[language_key]
                                     ))
-                                    st.rerun()
+                                    # st.rerun()
                             except Exception as e:
                                 st.error(f"Error disconnecting skills: {e}")
 
@@ -395,7 +395,7 @@ class StreamlitProfessionManager:
                                     st.success(labels["success_connect_skills_to_profession"].format(
                                         course_title=selected_profession['title']
                                     ))
-                                    st.rerun()
+                                    # st.rerun()
                             except Exception as e:
                                 st.error(f"Error connecting skills: {e}")
 
