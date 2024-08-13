@@ -157,7 +157,7 @@ class StreamlitPersonManager:
                             )
                             if success:
                                 st.success(labels["success_disconnect_person_from_course"])
-                                st.rerun()
+                                # st.rerun()
                         except Exception as e:
                             st.error(f"Error disconnecting skills: {e}")
 
@@ -175,7 +175,7 @@ class StreamlitPersonManager:
                             )
                             if success:
                                 st.success(labels["success_connect_skills_to_person"])
-                                st.rerun()
+                                # st.rerun()
                         except Exception as e:
                             st.error(f"Error connecting skills: {e}")
 
