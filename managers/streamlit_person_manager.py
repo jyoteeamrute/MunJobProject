@@ -1,3 +1,4 @@
+import re
 import streamlit as st
 from constants import *
 import matplotlib.pyplot as plt
@@ -32,7 +33,17 @@ class StreamlitPersonManager:
             language_key = 'title'
 
         all_skill_titles = [skill[language_key] for skill in all_skills]
-        selected_skills_titles = st.multiselect(labels["select_skills_for_person"], all_skill_titles,
+        #sorted a all_skill_titles
+        cleaned_all_skill_titles = [re.sub(r'\s+', ' ', title.strip().lower()) for title in all_skill_titles]
+
+        # Pair he cleaned title with the original title
+        all_skil_pairs = zip(cleaned_all_skill_titles, all_skill_titles)
+
+        # Sort based on the cleaned title
+        sorted_all_skil_pairs= sorted(all_skil_pairs, key=lambda x: x[0])
+        # Extract the sorted original title
+        sorted_sorted_all_skil_title = [pair[1] for pair in sorted_all_skil_pairs]
+        selected_skills_titles = st.multiselect(labels["select_skills_for_person"], sorted_sorted_all_skil_title,
                                                 key="selected_skill_title")
         selected_connected_skills = [
             skill for skill in all_skills if
@@ -59,13 +70,22 @@ class StreamlitPersonManager:
         properties = NODE_PROPERTIES['skill'][language]
         st.subheader(labels["delete_person"])
 
-        persons_names = self.person_manager.get_all_persons()
-
+        persons_names = sorted(self.person_manager.get_all_persons()) 
         if not persons_names:
             st.warning(labels.get("no_persons_available", "No persons available."))
             return
+        #sorted a person names list
+        cleaned_persons_names = [re.sub(r'\s+', ' ', title.strip().lower()) for title in persons_names]
 
-        selected_person_name = st.selectbox(labels["name"], persons_names, index=None,
+        # Pair he cleaned names with the original name
+        person_pairs = zip(cleaned_persons_names, persons_names)
+
+        # Sort based on the cleaned name
+        sorted_person_pairs = sorted(person_pairs, key=lambda x: x[0])
+
+        # Extract the sorted original name
+        sorted_person_name = [pair[1] for pair in sorted_person_pairs]
+        selected_person_name = st.selectbox(labels["name"], sorted_person_name, index=None,
                                             key="delete_person_name_selectbox")
 
         try:
@@ -99,8 +119,19 @@ class StreamlitPersonManager:
             language_key = 'title_fi'
         else:
             language_key = 'title'
+           
+        #sorted a person names list
+        cleaned_persons_names = [re.sub(r'\s+', ' ', title.strip().lower()) for title in persons_names]
 
-        selected_person_name = st.selectbox(labels["select_person"], persons_names, index=None,
+        # Pair he cleaned names with the original name
+        person_pairs = zip(cleaned_persons_names, persons_names)
+
+        # Sort based on the cleaned name
+        sorted_person_pairs = sorted(person_pairs, key=lambda x: x[0])
+
+        # Extract the sorted original name
+        sorted_person_name = [pair[1] for pair in sorted_person_pairs]
+        selected_person_name = st.selectbox(labels["select_person"], sorted_person_name, index=None,
                                             key="update_person_name_selectbox")
         if not selected_person_name:
             st.warning(labels.get("person_name_empty_warning", "Please select a person."))
@@ -187,7 +218,7 @@ class StreamlitPersonManager:
         st.subheader(labels["suggest_training_program"])
 
         persons_names = self.person_manager.get_all_persons()
-
+     
         if not persons_names:
             st.warning(labels.get("no_persons_available", "No persons available."))
             return
@@ -204,10 +235,31 @@ class StreamlitPersonManager:
             language_key = 'title'
 
         profession_titles = [profession[language_key] for profession in all_professions]
+        cleaned_profession_titles = [re.sub(r'\s+', ' ', title.strip().lower()) for title in profession_titles]
 
-        selected_person_name = st.selectbox(labels["select_client_for_suggestion"], persons_names, index=None,
+        # Pair he cleaned titles with the original titles
+        profession_pairs = zip(cleaned_profession_titles, profession_titles)
+
+        # Sort based on the cleaned titles
+        sorted_profession_pairs = sorted(profession_pairs, key=lambda x: x[0])
+
+        # Extract the sorted original titles
+        sorted_profession_titles = [pair[1] for pair in sorted_profession_pairs]
+     
+        #!!!sorted a person names list
+        cleaned_persons_names = [re.sub(r'\s+', ' ', title.strip().lower()) for title in persons_names]
+
+        # Pair he cleaned names with the original name
+        person_pairs = zip(cleaned_persons_names, persons_names)
+
+        # Sort based on the cleaned name
+        sorted_person_pairs = sorted(person_pairs, key=lambda x: x[0])
+
+        # Extract the sorted original name
+        sorted_person_name = [pair[1] for pair in sorted_person_pairs]
+        selected_person_name = st.selectbox(labels["select_client_for_suggestion"], sorted_person_name, index=None,
                                             key="person_name_selecct_skill_gap")
-        selected_profession_title = st.selectbox(labels["select_profession_for_suggestion"], profession_titles,
+        selected_profession_title = st.selectbox(labels["select_profession_for_suggestion"], sorted_profession_titles,
                                                  index=None, key="profession_select_skill_gap")
 
         if st.button(labels["suggest_training_program"], key="suggest_training_program_button"):

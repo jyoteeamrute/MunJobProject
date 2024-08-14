@@ -1,3 +1,4 @@
+import re
 import streamlit as st
 from constants import *
 
@@ -79,7 +80,18 @@ class StreamlitCourseManager:
             language_key = 'title'
 
         course_titles = [course[language_key] for course in all_courses]
-        selected_course_display_title = st.selectbox(properties["title"], course_titles,
+        # Clean course titles by removing special characters and quotation marks
+        cleaned_course_titles = [re.sub(r'[\'\"“”]', '', title.strip().lower()) for title in course_titles]
+
+        # Pair the cleaned titles with the original titles
+        course_pairs = zip(cleaned_course_titles, course_titles)
+
+        # Sort based on the cleaned titles
+        sorted_course_pairs = sorted(course_pairs, key=lambda x: x[0])
+
+        # Extract the sorted original titles
+        sorted_course_titles = [pair[1] for pair in sorted_course_pairs]
+        selected_course_display_title = st.selectbox(properties["title"], sorted_course_titles,
                                                      key="delete_course_title_selectbox")
 
         try:
@@ -118,9 +130,20 @@ class StreamlitCourseManager:
 
         # Extract course titles for the select box
         course_titles = [course[language_key] for course in all_courses]
+        # Clean course titles by removing special characters and quotation marks
+        cleaned_course_titles = [re.sub(r'[\'\"“”]', '', title.strip().lower()) for title in course_titles]
 
+        # Pair the cleaned titles with the original titles
+        course_pairs = zip(cleaned_course_titles, course_titles)
+
+        # Sort based on the cleaned titles
+        sorted_course_pairs = sorted(course_pairs, key=lambda x: x[0])
+
+        # Extract the sorted original titles
+        sorted_course_titles = [pair[1] for pair in sorted_course_pairs]
+        
         # Select a course to update
-        selected_course_display_title = st.selectbox(labels["select_course_for_update"], course_titles,
+        selected_course_display_title = st.selectbox(labels["select_course_for_update"], sorted_course_titles,
                                                      key="update_course_title_selectbox")
 
         try:
@@ -201,9 +224,21 @@ class StreamlitCourseManager:
 
         # Extract course titles for the select box
         courses_titles = [course[language_key] for course in all_courses]
+        # Clean course titles by removing special characters and quotation marks
+        cleaned_course_titles = [re.sub(r'[\'\"“”]', '', title.strip().lower()) for title in courses_titles]
 
+        # Pair the cleaned titles with the original titles
+        course_pairs = zip(cleaned_course_titles, courses_titles)
+
+        # Sort based on the cleaned titles
+        sorted_course_pairs = sorted(course_pairs, key=lambda x: x[0])
+
+        # Extract the sorted original titles
+        sorted_course_titles = [pair[1] for pair in sorted_course_pairs]
+
+     
         # Select a course to view related nodes
-        selected_course_title = st.selectbox(labels["select_course"], courses_titles, index=None,
+        selected_course_title = st.selectbox(labels["select_course"], sorted_course_titles, index=None,
                                              key="view_related_nodes_course_selectbox")
 
         if not selected_course_title:
@@ -278,8 +313,20 @@ class StreamlitCourseManager:
 
         # Extract course titles for the select box
         course_titles = [course[language_key] for course in all_courses]
+        
+        # Clean course titles by removing special characters and quotation marks
+        cleaned_course_titles = [re.sub(r'[\'\"“”]', '', title.strip().lower()) for title in course_titles]
+
+        # Pair the cleaned titles with the original titles
+        course_pairs = zip(cleaned_course_titles, course_titles)
+
+        # Sort based on the cleaned titles
+        sorted_course_pairs = sorted(course_pairs, key=lambda x: x[0])
+
+        # Extract the sorted original titles
+        sorted_course_titles = [pair[1] for pair in sorted_course_pairs]
         # Select a course to update
-        selected_course_display_title = st.selectbox(labels["select_course_for_update"], course_titles,
+        selected_course_display_title = st.selectbox(labels["select_course_for_update"], sorted_course_titles,
                                                      key="connect_to_skills_course_title_selectbox")
 
         # Find the selected course in the list to display its properties

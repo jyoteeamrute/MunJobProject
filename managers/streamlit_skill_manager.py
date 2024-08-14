@@ -1,3 +1,4 @@
+import re
 import streamlit as st
 from constants import *
 
@@ -90,9 +91,19 @@ class StreamlitSkillManager:
 
         # Extract skill titles for the select box
         skill_titles = [skill[language_key] for skill in all_skills]
+        # Clean course titles by removing special characters and quotation marks
+        cleaned_skill_titles = [re.sub(r'[\'\"“”]', '', title.strip().lower()) for title in skill_titles]
 
+        # Pair the cleaned titles with the original titles
+        skill_pairs = zip(cleaned_skill_titles, skill_titles)
+
+        # Sort based on the cleaned titles
+        sorted_skill_pairs = sorted(skill_pairs, key=lambda x: x[0])
+
+        # Extract the sorted original titles
+        sorted_skill_titles = [pair[1] for pair in sorted_skill_pairs]
         # Select a skill to delete
-        selected_skill_title = st.selectbox(properties["title"], skill_titles, key="delete_skill_title_selectbox")
+        selected_skill_title = st.selectbox(properties["title"], sorted_skill_titles, key="delete_skill_title_selectbox")
         try:
             # Find the selected skill in the list to display its properties
             selected_skill = next(skill for skill in all_skills if skill[language_key] == selected_skill_title)
@@ -127,9 +138,19 @@ class StreamlitSkillManager:
 
         # Extract skill titles for the select box
         skill_titles = [skill[language_key] for skill in all_skills]
+        # Clean course titles by removing special characters and quotation marks
+        cleaned_skill_titles = [re.sub(r'[\'\"“”]', '', title.strip().lower()) for title in skill_titles]
 
+        # Pair the cleaned titles with the original titles
+        skill_pairs = zip(cleaned_skill_titles, skill_titles)
+
+        # Sort based on the cleaned titles
+        sorted_skill_pairs = sorted(skill_pairs, key=lambda x: x[0])
+
+        # Extract the sorted original titles
+        sorted_skill_titles = [pair[1] for pair in sorted_skill_pairs]
         # Select a skill to update
-        selected_skill_title = st.selectbox(labels["select_skill_for_update"], skill_titles,
+        selected_skill_title = st.selectbox(labels["select_skill_for_update"], sorted_skill_titles,
                                             key="update_skill_title_selectbox")
 
         st.subheader(labels["edit_fields"])
@@ -213,9 +234,19 @@ class StreamlitSkillManager:
 
         # Extract skill titles for the select box
         skill_titles = [skill[language_key] for skill in all_skills]
+        # Clean course titles by removing special characters and quotation marks
+        cleaned_skill_titles = [re.sub(r'[\'\"“”]', '', title.strip().lower()) for title in skill_titles]
 
+        # Pair the cleaned titles with the original titles
+        skill_pairs = zip(cleaned_skill_titles, skill_titles)
+
+        # Sort based on the cleaned titles
+        sorted_skill_pairs = sorted(skill_pairs, key=lambda x: x[0])
+
+        # Extract the sorted original titles
+        sorted_skill_titles = [pair[1] for pair in sorted_skill_pairs]
         # Select a skill to view related nodes
-        selected_skill_title = st.selectbox(labels["select_skill"], skill_titles, index=None,
+        selected_skill_title = st.selectbox(labels["select_skill"], sorted_skill_titles, index=None,
                                             key="view_related_nodes_skill_selectbox")
 
         if not selected_skill_title:
@@ -347,9 +378,19 @@ class StreamlitSkillManager:
 
         # Extract skill titles for the select box
         skill_titles = [skill.get(language_key, "") for skill in all_new_skills]
+        # Clean course titles by removing special characters and quotation marks
+        cleaned_skill_titles = [re.sub(r'[\'\"“”]', '', title.strip().lower()) for title in skill_titles]
 
+        # Pair the cleaned titles with the original titles
+        skill_pairs = zip(cleaned_skill_titles, skill_titles)
+
+        # Sort based on the cleaned titles
+        sorted_skill_pairs = sorted(skill_pairs, key=lambda x: x[0])
+
+        # Extract the sorted original titles
+        sorted_skill_titles = [pair[1] for pair in sorted_skill_pairs]
         # Select a skill to view related nodes
-        selected_skill_title = st.selectbox(labels.get('view_related_nodes', 'View Related Nodes'), skill_titles,
+        selected_skill_title = st.selectbox(labels.get('view_related_nodes', 'View Related Nodes'), sorted_skill_titles,
                                             key="get_related_to_new_skill_nodes_skill_selectbox")
 
         selected_skill = next(

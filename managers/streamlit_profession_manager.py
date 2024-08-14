@@ -1,3 +1,4 @@
+import re
 import streamlit as st
 from constants import *
 
@@ -75,8 +76,18 @@ class StreamlitProfessionManager:
         else:
             language_key = 'title'
 
-        professions_titles = [profession[language_key] for profession in all_professions]
-        selected_profession_title = st.selectbox(properties["title"], professions_titles,
+        professions_titles = sorted([profession[language_key] for profession in all_professions])
+        cleaned_profession_titles = [re.sub(r'\s+', ' ', title.strip().lower()) for title in professions_titles]
+
+        # Pair he cleaned titles with the original titles
+        profession_pairs = zip(cleaned_profession_titles, professions_titles)
+
+        # Sort based on the cleaned titles
+        sorted_profession_pairs = sorted(profession_pairs, key=lambda x: x[0])
+
+        # Extract the sorted original titles
+        sorted_profession_titles = [pair[1] for pair in sorted_profession_pairs]
+        selected_profession_title = st.selectbox(properties["title"], sorted_profession_titles,
                                                  key="delete_profession_title_selectbox")
 
         try:
@@ -115,8 +126,19 @@ class StreamlitProfessionManager:
         else:
             language_key = 'title'
 
-        professions_titles = [profession[language_key] for profession in all_professions]
-        selected_profession_title = st.selectbox(properties["title"], professions_titles,
+        professions_titles = sorted ([profession[language_key] for profession in all_professions])
+        cleaned_profession_titles = [re.sub(r'\s+', ' ', title.strip().lower()) for title in professions_titles]
+
+        # Pair he cleaned titles with the original titles
+        profession_pairs = zip(cleaned_profession_titles, professions_titles)
+
+        # Sort based on the cleaned titles
+        sorted_profession_pairs = sorted(profession_pairs, key=lambda x: x[0])
+
+        # Extract the sorted original titles
+        sorted_profession_titles = [pair[1] for pair in sorted_profession_pairs]
+
+        selected_profession_title = st.selectbox(properties["title"], sorted_profession_titles,
                                                  key="update_profession_title_selectbox")
 
         try:
@@ -198,10 +220,19 @@ class StreamlitProfessionManager:
         language_key = 'title_fi' if language == 'Finnish' else 'title'
 
         # Extract professions titles for the select box
-        professions_titles = [profession[language_key] for profession in all_professions]
+        professions_titles = sorted([profession[language_key] for profession in all_professions])
+        cleaned_profession_titles = [re.sub(r'\s+', ' ', title.strip().lower()) for title in professions_titles]
 
+        # Pair he cleaned titles with the original titles
+        profession_pairs = zip(cleaned_profession_titles, professions_titles)
+
+        # Sort based on the cleaned titles
+        sorted_profession_pairs = sorted(profession_pairs, key=lambda x: x[0])
+
+        # Extract the sorted original titles
+        sorted_profession_titles = [pair[1] for pair in sorted_profession_pairs]
         # Select a profession to view related nodes
-        selected_profession_title = st.selectbox(labels["select_profession"], professions_titles,
+        selected_profession_title = st.selectbox(labels["select_profession"], sorted_profession_titles,
                                                  key="view_related_nodes_profession_selectbox")
 
         if selected_profession_title:
@@ -281,10 +312,20 @@ class StreamlitProfessionManager:
         language_key = 'title_fi' if language == 'Finnish' else 'title'
 
         # Extract professions titles for the select box
-        professions_titles = [profession[language_key] for profession in all_professions]
+        professions_titles = sorted([profession[language_key] for profession in all_professions])
+        cleaned_profession_titles = [re.sub(r'\s+', ' ', title.strip().lower()) for title in professions_titles]
+
+        # Pair he cleaned titles with the original titles
+        profession_pairs = zip(cleaned_profession_titles, professions_titles)
+
+        # Sort based on the cleaned titles
+        sorted_profession_pairs = sorted(profession_pairs, key=lambda x: x[0])
+
+        # Extract the sorted original titles
+        sorted_profession_titles = [pair[1] for pair in sorted_profession_pairs]
         # Select a course to update
         selected_profession_display_title = st.selectbox(labels["select_profession_to_connect_skills"],
-                                                         professions_titles,
+                                                         sorted_profession_titles,
                                                          key="connect_to_skills_profession_title_selectbox")
 
         # Find the selected profession in the list to display its properties
