@@ -87,6 +87,12 @@ class CourseManager:
                     print(message)
                     if warnings_fn:
                         warnings_fn(message)
+            else:
+                message = f"Node for course '{course_title}' or skill '{matched_skill}' not found"
+                print(message)
+                if warnings_fn:
+                    warnings_fn(message)
+
                         
     def add_courses_batch(self, courses_batch, warnings_fn=None):
         for course_data in courses_batch:
