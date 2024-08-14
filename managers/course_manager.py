@@ -69,15 +69,25 @@ class CourseManager:
             else:
                 skill_node = self.matcher.match(DEFAULT_SKILL_LABEL, title=matched_skill).first()
 
+            # if course_node and skill_node:
+            #     rel = Relationship(course_node, "TEACHES_SKILL", skill_node, type=relationship_type)
+            #     self.graph.create(rel)
+            # else:
+            #     message = f"Node {matched_skill} or node {skill_node} not found"
+            #     print(message)
+            #     if warnings_fn:
+            #         warnings_fn(message)
+            
             if course_node and skill_node:
-                rel = Relationship(course_node, "TEACHES_SKILL", skill_node, type=relationship_type)
-                self.graph.create(rel)
-            else:
-                message = f"Node {matched_skill} or node {skill_node} not found"
-                print(message)
-                if warnings_fn:
-                    warnings_fn(message)
-
+                try:
+                    rel = Relationship(course_node, "TEACHES_SKILL", skill_node, type=relationship_type)
+                    self.graph.create(rel)
+                except Exception as e:
+                    message = f"Failed to create relationship: {e}"
+                    print(message)
+                    if warnings_fn:
+                        warnings_fn(message)
+                        
     def add_courses_batch(self, courses_batch, warnings_fn=None):
         for course_data in courses_batch:
             self.add_course(
