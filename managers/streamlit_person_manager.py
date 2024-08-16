@@ -158,19 +158,34 @@ class StreamlitPersonManager:
                                   skill not in person_skills and skill.get('title') and skill.get('title_fi')]
 
             unconnected_skills_titles = [skill[language_key] for skill in unconnected_skills]
+            # sorted a unconnected_skills_titles  list
+            cleaned_unconnected_skills_titles = [re.sub(r'\s+', ' ', title.strip().lower()) for title in unconnected_skills_titles]
+
+            # Pair he cleaned names with the original tilte
+            unconnected_skill_pairs = zip(cleaned_unconnected_skills_titles, unconnected_skills_titles)
+
+            # Sort based on the cleaned title
+            sorted_unconnected_skill_pairs = sorted(unconnected_skill_pairs, key=lambda x: x[0])
+
+            # Extract the sorted original title
+            sorted_unconnected_skill_title = [pair[1] for pair in sorted_unconnected_skill_pairs]
 
             person_col1, person_col2, person_col3 = st.columns([1, 0.8, 1])
 
             with person_col1:
                 st.subheader(labels["person_has_skills"])
+                # selected_connected_skills_titles = [
+                #     skill[language_key] for skill in person_skills if
+                #     st.checkbox(skill[language_key], key=f"person_has_{skill['source_id']}")
+                # ]
                 selected_connected_skills_titles = [
-                    skill[language_key] for skill in person_skills if
-                    st.checkbox(skill[language_key], key=f"person_has_{skill['source_id']}")
+                skill[language_key] for skill in person_skills if
+                st.checkbox(skill[language_key], key=f"person_has_{skill[language_key]}_{skill['source_id']}")
                 ]
-
+   
             with person_col3:
                 st.subheader(labels["person_has_no_skills"])
-                selected_unconnected_skills_titles = st.multiselect(" ", unconnected_skills_titles,
+                selected_unconnected_skills_titles = st.multiselect(" ", sorted_unconnected_skill_title,
                                                                     key="unconnected_to_person_skills_multiselect")
 
             with person_col2:
@@ -276,7 +291,6 @@ class StreamlitPersonManager:
 
                 missing_skills = [skill for skill in profession_skills if skill not in person_skills]
                 missing_skill_titles = [skill[language_key] for skill in missing_skills]
-
                 if missing_skills:
                     st.subheader(labels["skills_not_acquired_by_client"].format(
                         selected_profession=selected_profession_title,
@@ -286,10 +300,8 @@ class StreamlitPersonManager:
                         for key in ['title', 'title_fi', 'description', 'description_fi']:
                             display_name = skill_properties.get(key, key)
                             st.write(f"**{display_name}:** {skill.get(key, 'N/A')}")
-
                     courses = self.db_manager.get_course_for_missing_skills(selected_person_name,
                                                                             selected_profession['title'])
-
                     if courses:
                         st.subheader(labels["courses_to_acquire_skills"])
                         for course in courses:
