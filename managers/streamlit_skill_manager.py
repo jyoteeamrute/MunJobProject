@@ -201,7 +201,8 @@ class StreamlitSkillManager:
                 'title_fi': new_skill_title_fi,
                 'description_fi': new_skill_description_fi
             }
-
+            if selected_skill_title == 'none':#handle if title is none for finish
+                selected_skill_title = new_skill_title
             success = self.skill_manager.update_skill(selected_skill_title, warnings_fn=st.warning,
                                                       **updated_properties)
             if success:
