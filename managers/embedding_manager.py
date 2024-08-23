@@ -67,7 +67,8 @@ class EmbeddingManager:
                 if embeddings.shape[1] != embedding.shape[0]:#@ Ensure the dimensions match before stacking
                     message = f"Embedding dimensions do not match: {embeddings.shape[1]} vs {embedding.shape[0]}"
                     if warnings_fn:
-                        warnings_fn(message)
+                        pass
+                        # warnings_fn(message)
                     return
 
                 embeddings = np.vstack((embeddings, embedding))
