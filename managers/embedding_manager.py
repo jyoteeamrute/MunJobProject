@@ -21,7 +21,16 @@ class EmbeddingManager:
         text = re.sub(r'[^\w\s]', '', text)
         text = " ".join(word for word in text.split() if word not in EmbeddingManager.stop_words)
         return text
-    
+
+    def pad_or_truncate_embedding(self, embedding, target_size):
+        current_size = embedding.shape[0]
+        if current_size < target_size:
+            padding = np.zeros((target_size - current_size,))
+            embedding = np.concatenate((embedding, padding), axis=0)
+        elif current_size > target_size:
+            embedding = embedding[:target_size]
+        return embedding
+
     def add_to_embeddings(self, title, description, path_key, warnings_fn=None):
         if path_key not in path_data:
             message = "Invalid path key provided."
@@ -58,24 +67,22 @@ class EmbeddingManager:
                     warnings_fn(message)
                 return
             else:
-                # @Ensure the dimensions match before stacking
-                if embeddings.ndim == 1:
-                    embeddings = embeddings.reshape(1, -1)  #@ Ensure embeddings is 2D
-                if embedding.ndim == 1:
-                    embedding = embedding.reshape(1, -1)  # @Ensure embedding is 2D
+                if embeddings.size == 0:
+                    # If embeddings is empty, initialize it with the new embedding
+                    embeddings = embedding[np.newaxis, :]
+                elif embeddings.ndim == 1:
+                    # If embeddings is 1D, make it 2D
+                    embeddings = embeddings[np.newaxis, :]
+                target_size = embeddings.shape[1]  # Get target size from existing embeddings
 
-                if embeddings.shape[1] != embedding.shape[0]:#@ Ensure the dimensions match before stacking
-                    message = f"Embedding dimensions do not match: {embeddings.shape[1]} vs {embedding.shape[0]}"
-                    if warnings_fn:
-                        pass
-                        # warnings_fn(message)
-                    return
-
+                embedding = self.pad_or_truncate_embedding(embedding, target_size)
                 embeddings = np.vstack((embeddings, embedding))
                 processed_lines.append(title_description)
                 title_lines.append(title)
         else:
-            embeddings = embedding.reshape(1, -1)  #@ Ensure embedding is 2D for consistency
+            # Handle case where embeddings might be empty or 1D
+            target_size = embedding.shape[0]
+            embeddings = embedding[np.newaxis, :]  # Ensure it's a 2D array
             processed_lines = [title_description]
             title_lines = [title]
 

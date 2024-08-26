@@ -203,7 +203,7 @@ class StreamlitSkillManager:
             }
             if selected_skill_title == 'none':#handle if title is none for finish
                 selected_skill_title = new_skill_title
-            success = self.skill_manager.update_skill(selected_skill_title, warnings_fn=st.warning,
+            success = self.skill_manager.update_skill(selected_skill_title, language,warnings_fn=st.warning,
                                                       **updated_properties)
             if success:
                 st.success(labels["success_update_skill"].format(skill_title=selected_skill_title))
@@ -451,7 +451,7 @@ class StreamlitSkillManager:
                              'description_fi': st.session_state[key_fi]}
 
             # Update the skill using the updated_skill dictionary
-            self.skill_manager.update_skill(selected_skill['title'], **updated_skill)
+            self.skill_manager.update_skill(selected_skill['title'], language,**updated_skill)
 
             related_nodes = self.db_manager.get_related_nodes(DEFAULT_NEW_SKILL_LABEL, selected_skill['title'])
 

@@ -158,16 +158,21 @@ class SkillManager:
         self.embedding_manager.delete_from_embeddings(title, description, type, warnings_fn)
         return True
 
-    def update_skill(self, old_skill_title, warnings_fn=None, **kwargs):
+    def update_skill(self, old_skill_title, language,warnings_fn=None, **kwargs):
         # Attempt to find the existing skill in the graph
-        existing_skill = self.matcher.match(DEFAULT_SKILL_LABEL, title=old_skill_title).first()
-        if not existing_skill:
-            existing_skill = self.matcher.match(DEFAULT_NEW_SKILL_LABEL, title=old_skill_title).first()
+        if language == 'Finnish':
+            existing_skill = self.matcher.match(DEFAULT_SKILL_LABEL, title_fi=old_skill_title).first()
+            if not existing_skill:
+                existing_skill = self.matcher.match(DEFAULT_NEW_SKILL_LABEL, title_fi=old_skill_title).first()
+
+        else:
+            existing_skill = self.matcher.match(DEFAULT_SKILL_LABEL, title=old_skill_title).first()
+            if not existing_skill:
+                existing_skill = self.matcher.match(DEFAULT_NEW_SKILL_LABEL, title=old_skill_title).first()
 
         # If the skill does not exist, print a warning and return False
         if not existing_skill:
             message = f"Skill '{old_skill_title}' does not exist in the graph."
-            print(message)
             if warnings_fn:
                 warnings_fn(message)
             return False
@@ -193,7 +198,6 @@ class SkillManager:
         if 'title' in updated_properties or 'description' in updated_properties or old_skill_type != new_skill_type:
             new_skill_title = existing_skill.get('title', '')
             new_skill_description = existing_skill.get('description', '')
-
             self.embedding_manager.update_embeddings(
                 old_skill_title, old_skill_description,
                 new_skill_title, new_skill_description,
