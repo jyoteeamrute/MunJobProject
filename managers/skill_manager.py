@@ -160,15 +160,12 @@ class SkillManager:
 
     def update_skill(self, old_skill_title, language,warnings_fn=None, **kwargs):
         # Attempt to find the existing skill in the graph
-        if language == 'Finnish':
-            existing_skill = self.matcher.match(DEFAULT_SKILL_LABEL, title_fi=old_skill_title).first()
-            if not existing_skill:
-                existing_skill = self.matcher.match(DEFAULT_NEW_SKILL_LABEL, title_fi=old_skill_title).first()
-
-        else:
-            existing_skill = self.matcher.match(DEFAULT_SKILL_LABEL, title=old_skill_title).first()
-            if not existing_skill:
-                existing_skill = self.matcher.match(DEFAULT_NEW_SKILL_LABEL, title=old_skill_title).first()
+        # if language == 'Finnish':
+        #     print("if finnish....")
+        #     existing_skill = self.matcher.match(DEFAULT_SKILL_LABEL, title_fi=old_skill_title).first()
+        existing_skill = self.matcher.match(DEFAULT_SKILL_LABEL, title=old_skill_title).first()
+        if not existing_skill:
+            existing_skill = self.matcher.match(DEFAULT_NEW_SKILL_LABEL, title=old_skill_title).first()
 
         # If the skill does not exist, print a warning and return False
         if not existing_skill:
